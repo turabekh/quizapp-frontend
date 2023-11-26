@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout, Menu, Drawer } from 'antd';
+import { AuthContext } from '../context/AuthContext';
 import {
   UserOutlined,
   SettingOutlined,
@@ -15,6 +16,7 @@ const { Header, Content } = Layout;
 
 const AuthenticatedLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(true);
+  const {currentUser} = useContext(AuthContext);
 
   const toggleDrawer = () => {
     setCollapsed(!collapsed);
@@ -76,11 +78,14 @@ const AuthenticatedLayout = ({ children }) => {
             padding: '0 16px',
           }}
         >
-          <Link to="/" className="logo">PDP QUIZ APP</Link>
-          <MenuOutlined
-            onClick={toggleDrawer}
-            style={{ fontSize: '20px', cursor: 'pointer' }}
-          />
+          <Link to="/" className="logo">QUIZ MASTER</Link>
+          <div>
+            <span style={{ marginRight: '16px' }}>Welcome, {currentUser?.first_name?.toUpperCase()}</span>  
+            <MenuOutlined
+              onClick={toggleDrawer}
+              style={{ fontSize: '20px', cursor: 'pointer' }}
+            />
+          </div>
         </Header>
         <Content style={{ margin: '8px', minHeight: "90vh" }}>
           <div className="main">

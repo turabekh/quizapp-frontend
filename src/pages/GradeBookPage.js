@@ -69,6 +69,7 @@ const GradeBookPage = () => {
                     dataSource={gradeData} 
                     columns={columns} 
                     rowKey={record => record.attemptId}
+                    scroll={{ x: 'max-content' }}
                 />
             )}
         </div>

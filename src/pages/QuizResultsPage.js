@@ -35,18 +35,20 @@ const QuizResultsPage = () => {
     }, [quizId, get_user_token]);
 
     if (loading) return <Spin />;
+    let screenWidth = window.screen.width;
+    let cardWidth = screenWidth < 600 ? "400px" : "80%";
 
     return (
-        <div>
+        <div style={{width: "80%", margin: "auto"}}>
             {quizResults ? (
-                <>
-                    <h1>Quiz Results: {quizResults.quiz.title}</h1>
+                <div style={{display: "flex", flexDirection: "column", alignItems: "center"}}>
+                    <h1 style={{textAlign: "center"}}>Quiz Results: {quizResults.quiz.title}</h1>
                     <List
                         itemLayout="horizontal"
                         dataSource={quizResults?.submissions}
                         renderItem={submission => (
                             <List.Item>
-                                <Card title={`Question: ${submission.question.text}`}>
+                                <Card title={`Question: ${submission.question.text}`} style={{width: cardWidth, margin: "auto"}}>
                                     <p>Your answer: {submission.chosen_answer.text}</p>
                                     <Tag color={submission.chosen_answer.is_correct ? 'green' : 'red'}>
                                         {submission.chosen_answer.is_correct ? 'Correct' : 'Incorrect'}
@@ -55,7 +57,7 @@ const QuizResultsPage = () => {
                             </List.Item>
                         )}
                     />
-                </>
+                </div>
             ) : (
                 <p>Quiz results not found.</p>
             )}

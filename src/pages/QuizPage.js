@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Radio, Card, Button, message, Spin, List, Modal  } from 'antd';
+import { Radio, Card, Button, message, Spin, List, Modal } from 'antd';
 import { AuthContext } from '../context/AuthContext';
 
 
-const cardStyle = {
-    marginBottom: 16,
-};
 
 const QuizPage = () => {
     const { quizId } = useParams();
@@ -34,6 +31,14 @@ const QuizPage = () => {
         fetchQuiz();
     }, [quizId]);
 
+    
+    const cardStyle = {
+        margin: "auto",
+        marginBottom: 16,
+    };
+
+    
+
     const initializeAnswers = (quizData) => {
         const initialAnswers = {};
         quizData.questions.forEach(question => {
@@ -48,7 +53,7 @@ const QuizPage = () => {
 
     const handleSubmit = () => {
         const unansweredQuestions = Object.values(answers).filter(answer => answer === null).length;
-    
+
         if (unansweredQuestions > 0) {
             Modal.confirm({
                 title: 'Confirm Submission',
@@ -70,7 +75,7 @@ const QuizPage = () => {
             question: parseInt(questionId),
             chosen_answer: chosenAnswerId
         }));
-    
+
         try {
             const response = await axios.post(
                 `https://turaboyformisc.pythonanywhere.com/api/courses/quizzes/submit/${quizId}/`,
@@ -83,7 +88,6 @@ const QuizPage = () => {
                     },
                 }
             );
-            console.log(response.data);
             message.success('Quiz submitted successfully');
             // Navigate to results page or handle the response as needed
             navigate(`/quizzes/results/${quizId}/`);
@@ -99,14 +103,16 @@ const QuizPage = () => {
         <div>
             {quiz ? (
                 <>
-                    <h1>{quiz.title}</h1>
+                    <h1 style={{ textAlign: "center" }}>{quiz.title}</h1>
 
                     {quiz?.questions?.map((question) => (
                         <Card
                             title={
-                                <span className='title-text'>{question?.text}</span>}
+                                <span className='title-text'>{question?.text}</span>
+                            }
                             key={question.id}
                             style={cardStyle}
+                            className='card-width'
                         >
                             <Radio.Group onChange={(e) => handleAnswerChange(question.id, e)}>
                                 <List
@@ -120,7 +126,9 @@ const QuizPage = () => {
                             </Radio.Group>
                         </Card>
                     ))}
-                    <Button type="primary" onClick={handleSubmit}>Submit Quiz</Button>
+                    <div style={{width: "80%", margin: "auto"}}>
+                        <Button type="primary" onClick={handleSubmit} block>Submit Quiz</Button>
+                    </div>
                 </>
             ) : (
                 <p>Quiz not found.</p>

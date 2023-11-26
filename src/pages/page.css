@@ -30,6 +30,10 @@
     display: none;
 }
 
+.card-width {
+    width: 80%;
+}
+
 @media screen and (max-width: 768px) {
     .form-width {
         width: 100%;
@@ -40,5 +44,13 @@
     .title-hidden {
         display: none;
     }
+    .card-width {
+        width: 100%;
+    }
 }
-  
+
+.title-text {
+    white-space: normal; /* Allows text to wrap */
+    overflow: visible;   /* Ensures text overflow is visible */
+    text-overflow: clip; /* Prevents text from being clipped */
+}

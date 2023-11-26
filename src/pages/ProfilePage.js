@@ -1,8 +1,10 @@
 import React, { useEffect, useContext } from 'react';
-import { Form, Input, Button, message, Tabs } from 'antd';
+import { Upload, Form, Input, Button, message, Tabs, Image } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { useMutation } from 'react-query';
 import { AuthContext } from '../context/AuthContext';
+import DefaultAvatar from "../assets/defaultAvatar.avif"
 import "./page.css"
 
 const { TabPane } = Tabs;
@@ -13,8 +15,13 @@ const ProfilePage = () => {
     const { currentUser, get_user_token, setCurrentUser } = useContext(AuthContext);
 
     useEffect(() => {
-        const userProfile = { ...currentUser };
-        form.setFieldsValue(userProfile);
+        // Initialize form values here
+        form.setFieldsValue({
+            first_name: currentUser?.first_name,
+            last_name: currentUser?.last_name,
+            phone_number: currentUser?.phone_number,
+            profile_image: currentUser?.profile_image 
+        });
     }, [form, currentUser]);
 
     const profileMutation = useMutation(values => {
@@ -27,6 +34,7 @@ const ProfilePage = () => {
         onSuccess: (data) => {
             // Handle success
             message.success('Profile updated successfully');
+            console.log("DAAAAAAAATA", data.data)
             setCurrentUser({ ...currentUser, ...data.data }); // Update the current user's data
         },
         onError: (error) => {
@@ -59,11 +67,58 @@ const ProfilePage = () => {
     };
 
     const handleProfileSubmit = (values) => {
-        profileMutation.mutate(values);
+        const formData = new FormData();
+        formData.append('first_name', values.first_name);
+        formData.append('last_name', values.last_name);
+        formData.append('phone_number', values.phone_number);
+
+        if (values.profile_image && values.profile_image.length > 0) {
+            // Ensure we're working with the file object
+            const file = values.profile_image[0].originFileObj;
+            if (file) {
+                formData.append('profile_image', file);
+            }
+        }
+
+        profileMutation.mutate(formData);
     };
 
+
+    const uploadButton = (
+        <div>
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
+
+    const normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    };
+
+    let currentProfileImage = () => {
+        if (currentUser?.profile_image) {
+            if (currentUser?.profile_image?.startsWith("http")) {
+                return currentUser?.profile_image
+            } else {
+                return `http://localhost:8000${currentUser?.profile_image}`
+            }
+        }
+        else {
+            return DefaultAvatar
+        }
+    }
     return (
         <div className='form-card form-width'>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+                <Image
+                    src={currentProfileImage()}
+                    style={{ borderRadius: '50%', width: '100px', height: '100px', objectFit: 'cover' }}
+                    alt="Profile Avatar"
+                />
+            </div>
             <Tabs defaultActiveKey="1">
                 <TabPane tab="Update Profile" key="1">
                     <Form
@@ -80,6 +135,22 @@ const ProfilePage = () => {
                         </Form.Item>
                         <Form.Item label="Phone Number" name="phone_number">
                             <Input />
+                        </Form.Item>
+                        <Form.Item
+                            label="Profile Image"
+                            name="profile_image"
+                            // valuePropName="fileList"
+                            getValueFromEvent={normFile}
+                        >
+                            <Upload
+                                name="profile_image"
+                                listType="picture-card"
+                                className="avatar-uploader"
+                                showUploadList={true}
+                                beforeUpload={() => false} // Return false so that antd doesn't upload the files automatically
+                            >
+                                {uploadButton}
+                            </Upload>
                         </Form.Item>
                         <Button type="primary" htmlType="submit" block>
                             Update Profile

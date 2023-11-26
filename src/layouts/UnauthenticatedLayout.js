@@ -69,7 +69,7 @@ const UnauthenticatedLayout = ({ children }) => {
                         padding: '0 16px',
                     }}
                 >
-                    <Link to="/" className="logo">PDP QUIZ APP</Link>
+                    <Link to="/" className="logo">QUIZ MASTER</Link>
                     <MenuOutlined
                         onClick={toggleDrawer}
                         style={{ fontSize: '20px', cursor: 'pointer' }}
