@@ -14,10 +14,17 @@ const CoursesList = () => {
     const [selectedTeacher, setSelectedTeacher] = useState(undefined);
     const { get_user_token } = useContext(AuthContext);
     const { data: courses, isLoading, isError } = useQuery('courses', () => fetchCoursesWithEnrollment(get_user_token()));
+    const [isDescriptionModalVisible, setIsDescriptionModalVisible] = useState(false);
+    const [selectedDescription, setSelectedDescription] = useState('');
 
     const showEnrollModal = (course) => {
         setSelectedCourse(course);
         setIsModalVisible(true);
+    };
+
+    const showDescriptionModal = (description) => {
+        setSelectedDescription(description);
+        setIsDescriptionModalVisible(true);
     };
 
     const handleEnroll = async () => {
@@ -67,6 +74,14 @@ const CoursesList = () => {
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
+            render: text => (
+                <div
+                    onClick={() => showDescriptionModal(text)}
+                    className="truncate-text"
+                >
+                    {text}
+                </div>
+            ),
         },
         {
             title: 'Academic Year',
@@ -136,6 +151,15 @@ const CoursesList = () => {
                 cancelText="Cancel"
             >
                 <p>Are you sure you want to enroll in {selectedCourse?.name}?</p>
+            </Modal>
+
+            <Modal
+                title="Course Description"
+                open={isDescriptionModalVisible}
+                onCancel={() => setIsDescriptionModalVisible(false)}
+                footer={null}
+            >
+                <p>{selectedDescription}</p>
             </Modal>
         </>
     );

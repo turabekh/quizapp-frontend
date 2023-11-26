@@ -34,7 +34,6 @@ const ProfilePage = () => {
         onSuccess: (data) => {
             // Handle success
             message.success('Profile updated successfully');
-            console.log("DAAAAAAAATA", data.data)
             setCurrentUser({ ...currentUser, ...data.data }); // Update the current user's data
         },
         onError: (error) => {

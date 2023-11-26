@@ -54,3 +54,13 @@
     overflow: visible;   /* Ensures text overflow is visible */
     text-overflow: clip; /* Prevents text from being clipped */
 }
+
+
+.truncate-text {
+    max-width: 250px; /* Adjust the width as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: blue;
+}

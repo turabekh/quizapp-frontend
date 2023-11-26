@@ -3,22 +3,22 @@ import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Spin, Card, List, Modal } from 'antd';
 
-const CourseDetailPageTitle = ({ course }) => {
+const CourseDetailPageTitle = ({ course, showDescriptionModal }) => {
     return (
         <div className='course-detail-page-title'>
             <div>{course.teacher.first_name} {course.teacher.last_name}</div>
             <div>{course.name}</div>
-            <div className='title-hidden'>{course.description}</div>
+            <div className='title-hidden truncate-text' onClick={() => showDescriptionModal(course.description)}>{course.description}</div>
             <div className='title-hidden'>{course.academic_year}</div>
         </div>
     );
 };
 
-const TopicTitle = ({ topic }) => {
+const TopicTitle = ({ topic, showTopicDescriptionModal}) => {
     return (
-        <div style={{display: "flex", justifyContent: "start", gap: "0px", alignItems: "center"}}>
-            <div style={{minWidth: "400px"}}>{topic.title}</div>
-            <div className='title-hidden'>{topic.description}</div>
+        <div style={{ display: "flex", justifyContent: "start", gap: "0px", alignItems: "center" }}>
+            <div style={{ minWidth: "400px" }}>{topic.title}</div>
+            <div className='title-hidden truncate-text' onClick={() => showTopicDescriptionModal(topic.description)}>{topic.description}</div>
         </div>
     );
 }
@@ -26,6 +26,8 @@ const TopicTitle = ({ topic }) => {
 const TopicList = ({ topics }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedTopic, setSelectedTopic] = useState(null);
+    const [isTopicDescriptionModalVisible, setIsTopicDescriptionModalVisible] = useState(false);
+    const [selectedTopicDescription, setSelectedTopicDescription] = useState('');
 
     const showQuizzesModal = (topic) => {
         setSelectedTopic(topic);
@@ -37,6 +39,11 @@ const TopicList = ({ topics }) => {
         setSelectedTopic(null);
     };
 
+    const showTopicDescriptionModal = (description) => {
+        setSelectedTopicDescription(description);
+        setIsTopicDescriptionModalVisible(true);
+    };
+
     return (
         <>
             <List
@@ -45,9 +52,9 @@ const TopicList = ({ topics }) => {
                 renderItem={topic => (
                     <List.Item>
                         <List.Item.Meta
-                            title={<TopicTitle topic={topic} />}
+                            title={<TopicTitle topic={topic} showTopicDescriptionModal={showTopicDescriptionModal} />}
                             description={
-                                <div style={{color: "blue", cursor: "pointer"}} onClick={() => showQuizzesModal(topic)}>
+                                <div style={{ color: "blue", cursor: "pointer" }} onClick={() => showQuizzesModal(topic)}>
                                     Quizzes: {topic.quizzes.length}
                                 </div>
                             }
@@ -68,6 +75,14 @@ const TopicList = ({ topics }) => {
                     </List.Item>}
                 />
             </Modal>
+            <Modal
+                title="Topic Description"
+                open={isTopicDescriptionModalVisible}
+                onCancel={() => setIsTopicDescriptionModalVisible(false)}
+                footer={null}
+            >
+                <p>{selectedTopicDescription}</p>
+            </Modal>
         </>
     );
 };
@@ -76,6 +91,8 @@ const CourseDetailPage = () => {
     const { courseId } = useParams();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [isDescriptionModalVisible, setIsDescriptionModalVisible] = useState(false);
+    const [selectedDescription, setSelectedDescription] = useState('');
 
     useEffect(() => {
         const fetchCourse = async () => {
@@ -92,17 +109,32 @@ const CourseDetailPage = () => {
         fetchCourse();
     }, [courseId]);
 
+
+    const showDescriptionModal = (description) => {
+        setSelectedDescription(description);
+        setIsDescriptionModalVisible(true);
+    };
+
     if (loading) return <Spin />;
 
     return (
         <div>
             {course ? (
-                <Card title={<CourseDetailPageTitle course={course} />}>
+                <Card title={<CourseDetailPageTitle course={course} showDescriptionModal={showDescriptionModal} />}>
                     <TopicList topics={course.topics} />
                 </Card>
             ) : (
                 <p>Course not found.</p>
             )}
+
+            <Modal
+                title="Course Description"
+                open={isDescriptionModalVisible}
+                onCancel={() => setIsDescriptionModalVisible(false)}
+                footer={null}
+            >
+                <p>{selectedDescription}</p>
+            </Modal>
         </div>
     );
 };

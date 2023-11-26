@@ -6,7 +6,7 @@ const { Footer } = Layout;
 const AppFooter = () => {
   return (
     <Footer style={{ textAlign: 'center' }}>
-      &copy; {new Date().getFullYear()} QUIZ APP | All Rights Reserved 
+      &copy; {new Date().getFullYear()} QUIZ Master | All Rights Reserved 
     </Footer>
   );
 };

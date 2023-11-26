@@ -36,7 +36,7 @@ const AuthenticatedLayout = ({ children }) => {
         bodyStyle={{ padding: 0 }}
         headerStyle={{ display: 'none' }}
       >
-        <Link to="/" className="logo" style={{ display: "flex", justifyContent: "start", alignItems: "center", height: "44px" }}>CS 1500</Link>
+        <Link to="/" className="logo" style={{ display: "flex", justifyContent: "start", alignItems: "center", height: "44px" }}>Quiz Master</Link>
         <Menu defaultSelectedKeys={['1']} mode="inline">
           <Menu.Item key="2" icon={<UserOutlined />} onClick={handleMenuItemClick}>
             <Link to="/">Home</Link>

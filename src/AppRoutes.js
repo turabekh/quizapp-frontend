@@ -18,7 +18,6 @@ const AppRoutes = () => {
     const { currentUser } = useContext(AuthContext);
     const ProtectedRoute = ({ children }) => {
         let user = JSON.parse(localStorage.getItem('user'));
-        console.log("User", user)
         if (!user) {
             return <Navigate to="/" />;
         }
