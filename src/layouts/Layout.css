@@ -1,0 +1,16 @@
+.main {
+    width: 90%;
+    margin: auto;
+    min-height: 60vh;
+    padding-top: 40px;
+  }
+  
+
+@media screen and (min-width: 768px) {
+    .main {
+      width: 100%;
+      margin: auto;
+      min-height: 40vh;
+    }
+  }
+  
