@@ -102,7 +102,7 @@ const ProfilePage = () => {
             if (currentUser?.profile_image?.startsWith("http")) {
                 return currentUser?.profile_image
             } else {
-                return `http://localhost:8000${currentUser?.profile_image}`
+                return `https://turaboyformisc.pythonanywhere.com${currentUser?.profile_image}`
             }
         }
         else {

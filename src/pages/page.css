@@ -64,3 +64,7 @@
     cursor: pointer;
     color: blue;
 }
+
+.preserve-whitespace {
+    white-space: pre-wrap;
+}

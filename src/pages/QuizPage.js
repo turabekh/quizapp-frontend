@@ -77,7 +77,7 @@ const QuizPage = () => {
         }));
 
         try {
-            const response = await axios.post(
+            await axios.post(
                 `https://turaboyformisc.pythonanywhere.com/api/courses/quizzes/submit/${quizId}/`,
                 answerSubmissions,
                 {
