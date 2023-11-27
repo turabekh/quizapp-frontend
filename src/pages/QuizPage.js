@@ -4,6 +4,23 @@ import axios from 'axios';
 import { Radio, Card, Button, message, Spin, List, Modal } from 'antd';
 import { AuthContext } from '../context/AuthContext';
 
+const shuffleArray = (array) => {
+    let currentIndex = array.length, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (currentIndex !== 0) {
+
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // And swap it with the current element.
+        [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+}
 
 
 const QuizPage = () => {
@@ -13,6 +30,13 @@ const QuizPage = () => {
     const [loading, setLoading] = useState(false);
     const { get_user_token } = useContext(AuthContext);
     const navigate = useNavigate()
+    const [shuffledQuestions, setShuffledQuestions] = useState([]);
+
+    useEffect(() => {
+        if (quiz?.questions) {
+            setShuffledQuestions(shuffleArray([...quiz.questions]));
+        }
+    }, [quiz]);
 
     useEffect(() => {
         const fetchQuiz = async () => {
@@ -105,10 +129,10 @@ const QuizPage = () => {
                 <>
                     <h1 style={{ textAlign: "center" }}>{quiz.title}</h1>
 
-                    {quiz?.questions?.map((question) => (
+                    {shuffledQuestions?.map((question) => (
                         <Card
                             title={
-                                <span className='title-text'>{question?.text}</span>
+                                <span className='title-text no-select'>{question?.text}</span>
                             }
                             key={question.id}
                             style={cardStyle}
@@ -119,7 +143,7 @@ const QuizPage = () => {
                                     dataSource={question.choices}
                                     renderItem={(choice) => (
                                         <List.Item key={choice.id}>
-                                            <Radio key={choice.id} value={choice.id}>{choice.text}</Radio>
+                                            <Radio key={choice.id} value={choice.id} className="no-select">{choice.text}</Radio>
                                         </List.Item>
                                     )}
                                 />

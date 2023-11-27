@@ -68,3 +68,10 @@
 .preserve-whitespace {
     white-space: pre-wrap;
 }
+
+.no-select {
+    user-select: none;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+}
