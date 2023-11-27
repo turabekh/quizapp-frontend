@@ -19,7 +19,7 @@ const CourseDetailPageTitle = ({ course, showDescriptionModal }) => {
             <div className='course-detail-page-title'>
                 <div>{course.teacher.first_name} {course.teacher.last_name}</div>
                 <div>{course.name}</div>
-                <div className='title-hidden truncate-text preserve-whitespace' onClick={() => showDescriptionModal(course.description)}>{course.description}</div>
+                <div className='title-hidden truncate-text' onClick={() => showDescriptionModal(course.description)}>{course.description}</div>
                 <div className='title-hidden truncate-text' onClick={() => showLearningOutcomes()} >{course?.learning_outcomes}</div>
                 <div className='title-hidden truncate-text' onClick={() => showAssessmentCriteria()}>Assessment Criteria</div>
                 <div className='title-hidden'>{course.academic_year}</div>
